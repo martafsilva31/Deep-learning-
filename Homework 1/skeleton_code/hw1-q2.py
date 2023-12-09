@@ -47,7 +47,7 @@ class LogisticRegression(nn.Module):
         forward pass -- this is enough for it to figure out how to do the
         backward pass.
         """
-        out = self.linear(x)
+        out = self.layer(x)
         return out 
 
 
@@ -86,7 +86,7 @@ class FeedforwardNetwork(nn.Module):
         self.hidden_layers = nn.ModuleList()
         for i in range(layers-1):
             hidden_layer = nn.Linear(hidden_size,hidden_size)
-            self.hidden_layerss.append(hidden_layer)
+            self.hidden_layers.append(hidden_layer)
         
 
     def forward(self, x, **kwargs):
@@ -97,6 +97,7 @@ class FeedforwardNetwork(nn.Module):
         the output logits from x. This will include using various hidden
         layers, pointwise nonlinear functions, and dropout.
         """
+        
         x = self.input_layer(x)
         x = self.activation(x)
         x = self.dropout(x)
@@ -138,6 +139,8 @@ def train_batch(X, y, model, optimizer, criterion, **kwargs):
     loss.backward()
     # update model weights
     optimizer.step()
+    
+    return loss.item() 
 
 
 def predict(model, X):
@@ -280,6 +283,7 @@ def main():
         "Train Loss": train_losses,
         "Valid Loss": valid_losses,
     }
+    
     # Choose ylim based on model since logistic regression has higher loss
     if opt.model == "logistic_regression":
         ylim = (0., 1.6)
