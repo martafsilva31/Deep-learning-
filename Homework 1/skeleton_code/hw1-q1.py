@@ -73,9 +73,6 @@ class MLP(object):
         self.W1 = np.random.normal(mu, sigma, size = (hidden_size, n_features))
         self.W2 = np.random.normal(mu, sigma, size = (n_classes, hidden_size))
 
-        self.W1 = self.W1.reshape((hidden_size,n_features))
-        self.W2 = self.W2.reshape((n_classes,hidden_size))
-
         self.b1 = np.zeros(hidden_size)
         self.b2 = np.zeros(n_classes)
 
@@ -109,7 +106,7 @@ class MLP(object):
         grad_w2 = np.outer(grad_z2, h1)
         
         grad_h1 = self.W2.T.dot(grad_z2)
-        grad_z1 = grad_h1.dot(np.heaviside(z1,0))
+        grad_z1 = grad_h1*  (z1 > 0)
         grad_b1 = grad_z1
         grad_w1 = np.outer(grad_z1,h0)
 
